@@ -53,14 +53,10 @@ pipeline {
                 sh " mvn clean install"
             }
         }
-        stage("Docker Build & Push"){
+        stage("Build docker image"){
             steps{
                 script{
-                   withDockerRegistry(credentialsId: '26c0d1c5-f388-463e-8f6d-a4a83fb9fa3c', toolName: 'docker') {
-                        
-                        sh "docker build -t petclinic11 ."
-                        sh "docker tag image1 nareshbabu1991/pet-clinic123:latest "
-                        sh "docker push nareshbabu1991/pet-clinic123:latest "
+                   sh 'docker build -t nareshbabu1991/petclinic .'
                     }
                 }
             }
