@@ -71,7 +71,7 @@ pipeline {
         stage("Docker Build & Push"){
             steps{
                 script{
-                   withDockerRegistry(credentialsId: '26c0d1c5-f388-463e-8f6d-a4a83fb9fa3c', toolName: 'docker') {
+                   withDockerRegistry(credentialsId: 'docker-cred', toolName: 'docker') {
                         
                         sh "docker tag image1 nareshbabu1991/pet-clinic123:latest "
                         sh "docker push nareshbabu1991/pet-clinic123:latest "
