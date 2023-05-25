@@ -60,5 +60,12 @@ pipeline {
                 }
             }
         }
+        stage('Build docker santa image'){
+            steps{
+                script{
+                    sh 'docker build -t nareshbabu1991/secretsanta .'
+                }
+            }
+        }
     }
 }
