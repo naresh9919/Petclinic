@@ -14,7 +14,7 @@ pipeline {
         
         stage("Git Checkout"){
             steps{
-                git branch: 'main', changelog: false, poll: false, url: 'https://github.com/naresh9919/secretsanta-generator.git'
+                git branch: 'main', changelog: false, poll: false, url: 'https://github.com/naresh9919/Petclinic.git'
             }
         }
         
@@ -33,9 +33,9 @@ pipeline {
         stage("Sonarqube Analysis "){
             steps{
                 withSonarQubeEnv('sonar-server') {
-                    sh ''' $SCANNER_HOME/bin/sonar-scanner -Dsonar.projectName=secretsanta \
+                    sh ''' $SCANNER_HOME/bin/sonar-scanner -Dsonar.projectName=petclinic \
                     -Dsonar.java.binaries=. \
-                    -Dsonar.projectKey=secretsanta '''
+                    -Dsonar.projectKey=petclinic '''
     
                 }
             }
@@ -60,13 +60,6 @@ pipeline {
                 }
             }
         }
-        stage('Build docker santa image'){
-            steps{
-                script{
-                    sh 'docker build -t nareshbabu1991/secretsanta .'
-                }
-            }
-        }
 
         stage("Docker Build & Push"){
             steps{
@@ -74,17 +67,25 @@ pipeline {
                    withDockerRegistry(credentialsId: 'docker-cred', toolName: 'docker') {
                         
                         sh "docker tag nareshbabu1991/petclinic nareshbabu1991/petclinic:latest "
-                        sh "docker tag nareshbabu1991/secretsanta nareshbabu1991/petclinic:latest "
                         sh "docker push nareshbabu1991/petclinic:latest "
-                        sh "docker push nareshbabu1991/secretsanta:latest "
                     }
                 }
             }
         }
-        stage("TRIVY"){
-            steps{
-                sh " trivy image nareshbabu1991/petclinic:latest --security-checks vuln "
+        post {
+                success {
+                    echo 'Archiving the artifacts'
+                    archiveArtifacts artifacts: '**/target/*.war'
+                }
+            }
+        }
+        stage ('Deployments'){
+            parallel {
+                stage ("Deploy to Staging"){
+                    steps {
+                        deploy adapters: [tomcat7(credentialsId: 'tomcat_pwd', path: '', url: 'http://65.1.3.157:8080/')], contextPath: null, war: '**/*.war'
+                    }
+                }
             }
         }
     }
-}
