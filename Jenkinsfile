@@ -72,7 +72,7 @@ pipeline {
                 }
             }
         }
-        
+
         stage ('Deployments'){
             parallel {
                 stage ("Deploy to Staging"){
@@ -83,3 +83,4 @@ pipeline {
             }
         }
     }
+    
