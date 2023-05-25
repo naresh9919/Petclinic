@@ -39,12 +39,6 @@ pipeline {
     
                 }
             }
-            post {
-                success {
-                    echo 'Archiving the artifacts'
-                    archiveArtifacts artifacts: '**/target/*.war'
-                }
-            }
         }
 
         stage("OWASP Dependency Check"){
