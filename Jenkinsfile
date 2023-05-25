@@ -83,7 +83,7 @@ pipeline {
         }
         stage("TRIVY"){
             steps{
-                sh " trivy image nareshbabu1991/petclinic:latest --scanners vuln"
+                sh " trivy image nareshbabu1991/petclinic:latest "
             }
         }
     }
