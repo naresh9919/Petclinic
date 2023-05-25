@@ -11,7 +11,6 @@ pipeline {
     }
     
     stages{
-        
         stage("Git Checkout"){
             steps{
                 git branch: 'main', changelog: false, poll: false, url: 'https://github.com/naresh9919/Petclinic.git'
@@ -24,35 +23,35 @@ pipeline {
             }
         }
         
-         stage("Test Cases"){
+        stage("Test Cases"){
             steps{
                 sh "mvn test"
             }
         }
-        
+         
         stage("Sonarqube Analysis "){
             steps{
                 withSonarQubeEnv('sonar-server') {
                     sh ''' $SCANNER_HOME/bin/sonar-scanner -Dsonar.projectName=petclinic \
                     -Dsonar.java.binaries=. \
                     -Dsonar.projectKey=petclinic '''
-    
                 }
             }
         }
-
+        
         stage("OWASP Dependency Check"){
             steps{
                 dependencyCheck additionalArguments: '--scan ./ ', odcInstallation: 'DP-Check'
                 dependencyCheckPublisher pattern: '**/dependency-check-report.xml'
             }
         }
-        
-         stage("Build"){
+         
+        stage("Build"){
             steps{
                 sh " mvn clean install"
             }
         }
+        
         stage('Build docker image'){
             steps{
                 script{
@@ -60,7 +59,7 @@ pipeline {
                 }
             }
         }
-
+        
         stage("Docker Build & Push"){
             steps{
                 script{
@@ -72,7 +71,7 @@ pipeline {
                 }
             }
         }
-
+        
         stage ('Deployments'){
             parallel {
                 stage ("Deploy to Staging"){
@@ -83,3 +82,4 @@ pipeline {
             }
         }
     }
+    
