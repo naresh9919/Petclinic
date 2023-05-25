@@ -73,8 +73,8 @@ pipeline {
                 script{
                    withDockerRegistry(credentialsId: 'docker-cred', toolName: 'docker') {
                         
-                        sh "docker tag image1 nareshbabu1991/pet-clinic123:latest "
-                        sh "docker push nareshbabu1991/pet-clinic123:latest "
+                        sh "docker tag image1 nareshbabu1991/petclinic:latest "
+                        sh "docker push nareshbabu1991/petclinic:latest "
                     }
                 }
             }
