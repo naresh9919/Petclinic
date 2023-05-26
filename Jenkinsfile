@@ -6,11 +6,14 @@ pipeline {
         maven 'maven3'
     }
     
-    environment {
-        SCANNER_HOME=tool 'sonar-scanner'
-    }
-    
     stages{
+        
+        stage("Cleanup Workspace"){
+            steps{
+                cleanWs()
+            }
+        }
+        
         stage("Git Checkout"){
             steps{
                 git branch: 'main', changelog: false, poll: false, url: 'https://github.com/naresh9919/Petclinic.git'
@@ -23,52 +26,10 @@ pipeline {
             }
         }
         
-        stage("Test Cases"){
+         stage("Test Cases"){
             steps{
                 sh "mvn test"
             }
         }
-         
-        stage("Sonarqube Analysis "){
-            steps{
-                withSonarQubeEnv('sonar-server') {
-                    sh ''' $SCANNER_HOME/bin/sonar-scanner -Dsonar.projectName=petclinic \
-                    -Dsonar.java.binaries=. \
-                    -Dsonar.projectKey=petclinic '''
-                }
-            }
-        }
-        
-        stage("OWASP Dependency Check"){
-            steps{
-                dependencyCheck additionalArguments: '--scan ./ ', odcInstallation: 'DP-Check'
-                dependencyCheckPublisher pattern: '**/dependency-check-report.xml'
-            }
-        }
-         
-        stage("Build"){
-            steps{
-                sh " mvn clean install"
-            }
-        }
-        
-        stage('Build docker image'){
-            steps{
-                script{
-                    sh 'docker build -t nareshbabu1991/petclinic .'
-                }
-            }
-        }
-        
-        stage("Docker Build & Push"){
-            steps{
-                script{
-                   withDockerRegistry(credentialsId: 'docker-cred', toolName: 'docker') {
-                        
-                        sh "docker tag nareshbabu1991/petclinic nareshbabu1991/petclinic:latest "
-                        sh "docker push nareshbabu1991/petclinic:latest "
-                    }
-                }
-            }
-        }
     }
+}
