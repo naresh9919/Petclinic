@@ -71,15 +71,4 @@ pipeline {
                 }
             }
         }
-        
-        stage ('Deployments'){
-            parallel {
-                stage ("Deploy to Staging"){
-                    steps {
-                        deploy adapters: [tomcat7(credentialsId: 'tomcat_pwd', path: '', url: 'http://65.1.3.157:8080/')], contextPath: null, war: '**/*.war'
-                    }
-                }
-            }
-        }
     }
-    
