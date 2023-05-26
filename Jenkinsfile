@@ -5,7 +5,7 @@ pipeline {
         jdk 'jdk11'
         maven 'maven3'
     }
-    
+
     environment {
         SCANNER_HOME=tool 'sonar-scanner'
     }
@@ -44,6 +44,13 @@ pipeline {
                     -Dsonar.projectKey=petclinic '''
     
                 }
+            }
+        }
+        
+        stage("OWASP Dependency Check"){
+            steps{
+                dependencyCheck additionalArguments: '--scan ./ ', odcInstallation: 'DP-Check'
+                dependencyCheckPublisher pattern: '**/dependency-check-report.xml'
             }
         }
     }
