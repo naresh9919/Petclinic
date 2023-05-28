@@ -8,10 +8,11 @@ pipeline {
 
     environment {
         SCANNER_HOME=tool 'sonar-scanner'
-        NEXUS_URL = 'http://65.0.139.190:8081/'
-        NEXUS_USERNAME = 'Nexus-cred'
-        NEXUS_PASSWORD = 'Nexus-cred'
-
+        NEXUS_VERSION = "nexus3"
+        NEXUS_PROTOCOL = "http"
+        NEXUS_URL = "172.31.1.251:8081"
+        NEXUS_REPOSITORY = "petclinic"
+        NEXUS_CREDENTIAL_ID = "Nexus_cred"
     }
     
     stages{
@@ -50,27 +51,43 @@ pipeline {
                 }
             }
         }
-        
-        stage("Upload jar to Nexus"){
-            steps{
-                nexusArtifactUploader artifacts: [
-                    [
-                        artifactId: 'spring-framework-petclinic', 
-                        classifier: '', 
-                        file: 'target/spring-framework-petclinic', 
-                        type: 'war'
-                    ]    
-                ], 
-                credentialsId: 'Nexus-cred', 
-                groupId: 'org.springframework.samples', 
-                nexusUrl: '172.31.1.251:8081', 
-                nexusVersion: 'nexus3', 
-                protocol: 'http', 
-                repository: 'http://65.0.139.190:8081/repository/petclinic/', 
-                version: '5.3.13'
+
+        stage("Publish to Nexus Repository Manager") {
+            steps {
+                script {
+                    pom = readMavenPom file: "pom.xml";
+                    filesByGlob = findFiles(glob: "target/*.${pom.packaging}");
+                    echo "${filesByGlob[0].name} ${filesByGlob[0].path} ${filesByGlob[0].directory} ${filesByGlob[0].length} ${filesByGlob[0].lastModified}"
+                    artifactPath = filesByGlob[0].path;
+                    artifactExists = fileExists artifactPath;
+                    if(artifactExists) {
+                        echo "*** File: ${artifactPath}, group: ${pom.groupId}, packaging: ${pom.packaging}, version ${pom.version}";
+                        nexusArtifactUploader(
+                            nexusVersion: NEXUS_VERSION,
+                            protocol: NEXUS_PROTOCOL,
+                            nexusUrl: NEXUS_URL,
+                            groupId: pom.groupId,
+                            version: pom.version,
+                            repository: NEXUS_REPOSITORY,
+                            credentialsId: NEXUS_CREDENTIAL_ID,
+                            artifacts: [
+                                [artifactId: pom.artifactId,
+                                classifier: '',
+                                file: artifactPath,
+                                type: pom.packaging],
+                                [artifactId: pom.artifactId,
+                                classifier: '',
+                                file: "pom.xml",
+                                type: "pom"]
+                            ]
+                        );
+                    } else {
+                        error "*** File: ${artifactPath}, could not be found";
+                    }
+                }
             }
         }
-
+        
         stage("OWASP Dependency Check"){
             steps{
                 dependencyCheck additionalArguments: '--scan ./ ', odcInstallation: 'DP-Check'
