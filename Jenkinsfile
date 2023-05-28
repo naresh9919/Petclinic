@@ -9,8 +9,8 @@ pipeline {
     environment {
         SCANNER_HOME=tool 'sonar-scanner'
         NEXUS_URL = 'http://65.0.139.190:8081/'
-        NEXUS_USERNAME = Nexus-cred('nexus-username')
-        NEXUS_PASSWORD = Nexus-cred('nexus-password')
+        NEXUS_USERNAME = 'Nexus-cred'
+        NEXUS_PASSWORD = 'Nexus-cred'
 
     }
     
