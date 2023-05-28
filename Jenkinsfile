@@ -46,6 +46,26 @@ pipeline {
                 }
             }
         }
+        
+        stage("Upload jar to Nexus"){
+            steps{
+                nexusArtifactUploader artifacts: [
+                    [
+                        artifactId: 'spring-framework-petclinic', 
+                        classifier: '', 
+                        file: 'target/Spring Framework Petclinic.5.3.13.jar', 
+                        type: 'jar'
+                    ]    
+                ], 
+                credentialsId: 'Nexus-cred', 
+                groupId: 'org.springframework.samples', 
+                nexusUrl: '172.31.1.251:8081', 
+                nexusVersion: 'nexus3', 
+                protocol: 'http', 
+                repository: 'http://65.0.139.190:8081/repository/petclinic/', 
+                version: '5.3.13'
+            }
+        }
 
         stage("OWASP Dependency Check"){
             steps{
@@ -73,7 +93,7 @@ pipeline {
                 script{
                      withDockerRegistry(credentialsId: 'dockerhub-cred', toolName: 'docker') {
                         
-                        sh "docker tag nareshbabu1991/petclinic nareshbabu1991/petclinic:latest "
+                        sh "docker tag image1 nareshbabu1991/petclinic:latest "
                         sh "docker push nareshbabu1991/petclinic:latest "
                     }
                 }
