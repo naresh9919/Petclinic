@@ -53,8 +53,8 @@ pipeline {
                     [
                         artifactId: 'spring-framework-petclinic', 
                         classifier: '', 
-                        file: 'target/Spring Framework Petclinic.5.3.13.jar', 
-                        type: 'jar'
+                        file: 'target/Spring Framework Petclinic.5.3.13.war', 
+                        type: 'war'
                     ]    
                 ], 
                 credentialsId: 'Nexus-cred', 
