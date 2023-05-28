@@ -8,6 +8,10 @@ pipeline {
 
     environment {
         SCANNER_HOME=tool 'sonar-scanner'
+        NEXUS_URL = 'http://65.0.139.190:8081/'
+        NEXUS_USERNAME = Nexus-cred('nexus-username')
+        NEXUS_PASSWORD = Nexus-cred('nexus-password')
+
     }
     
     stages{
@@ -53,7 +57,7 @@ pipeline {
                     [
                         artifactId: 'spring-framework-petclinic', 
                         classifier: '', 
-                        file: 'target/petclinic.war', 
+                        file: 'target/Petclinic.war', 
                         type: 'war'
                     ]    
                 ], 
