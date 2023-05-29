@@ -62,7 +62,7 @@ pipeline {
         stage('Build docker image'){
             steps{
                 script{
-                    sh 'docker build -t nareshbabu1991/petclinic .'
+                    sh 'docker build -t petclinic .'
                 }
             }
         }
@@ -72,7 +72,7 @@ pipeline {
                 script{
                      withDockerRegistry(credentialsId: 'dockerhub-cred', toolName: 'docker') {
                         
-                        sh "docker tag nareshbabu1991/petclinic nareshbabu1991/petclinic:latest "
+                        sh "docker tag petclinic nareshbabu1991/petclinic:latest "
                         sh "docker push nareshbabu1991/petclinic:latest "
                     }
                 }
