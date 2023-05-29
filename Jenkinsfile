@@ -10,8 +10,8 @@ pipeline {
         SCANNER_HOME=tool 'sonar-scanner'
         NEXUS_VERSION = "nexus3"
         NEXUS_PROTOCOL = "http"
-        NEXUS_URL = "http://3.110.209.250:8081"
-        NEXUS_REPOSITORY = "petclinic-release"
+        NEXUS_URL = "3.110.209.250:8081"
+        NEXUS_REPOSITORY = "maven-nexus-repo"
         NEXUS_CREDENTIAL_ID = "Nexus_cred"
     }
     
