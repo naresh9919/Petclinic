@@ -31,7 +31,7 @@ pipeline {
             parallel {
                 stage ("Deploy to Staging"){
                     steps {
-                        deploy adapters: [tomcat7(credentialsId: 'tomcat-cred', path: '', url: 'http://13.233.36.155:8080/')], contextPath: null, war: '**/*.war'
+                        deploy adapters: [tomcat9(credentialsId: 'tomcat-cred', path: '', url: 'http://13.233.36.155:8080/')], contextPath: null, war: '**/*.war'
                     }
                 }
             }
