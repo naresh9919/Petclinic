@@ -45,6 +45,14 @@ pipeline {
                 }
             }
         }
+
+        stage("deploy to tomcat"){
+            steps{
+                sshagent(['tomcat-privatekey']) {
+                    sh "scp -o StrictHostKeyChecking=no target/petclinic.war ubuntu@3.109.3.26:/opt/tomcat/webapps"
+                }
+            }
+        }
         
         stage("OWASP Dependency Check"){
             steps{
@@ -76,12 +84,6 @@ pipeline {
                         sh "docker push nareshbabu1991/petclinic:latest "
                     }
                 }
-            }
-        }
-
-        stage("TRIVY"){
-            steps{
-                sh " trivy image --severity HIGH,CRITICAL nareshbabu1991/petclinic:latest"
             }
         }
     }
