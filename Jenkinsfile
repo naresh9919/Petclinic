@@ -47,7 +47,7 @@ pipeline {
             post {
                 success {
                     echo 'Archiving the artifacts'
-                    archiveArtifacts artifacts: 'root/petclinic/target/petclinic.war'
+                    archiveArtifacts artifacts: '**/target/petclinic.war'
                 }
             }
         }
