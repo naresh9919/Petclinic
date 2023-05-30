@@ -44,12 +44,18 @@ pipeline {
                     -Dsonar.projectKey=petclinic '''
                 }
             }
+            post {
+                success {
+                    echo 'Archiving the artifacts'
+                    archiveArtifacts artifacts: '**/target/*.war'
+                }
+            }
         }
 
         stage ('Deploy To Tomcat') {
             steps {
                 script {
-                    deploy adapters: [tomcat9(credentialsId: 'tomcat_cred', path: '', url: 'http://13.233.36.155:8080')], contextPath: '/pipeline', onFailure: false, war: 'webapp/target/*.war'
+                    deploy adapters: [tomcat9(credentialsId: 'tomcat_cred', path: '', url: 'http://13.233.36.155:8080/')], contextPath: null, war: '**/*.war'
                 }
             }
         }
