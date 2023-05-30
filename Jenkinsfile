@@ -78,5 +78,11 @@ pipeline {
                 }
             }
         }
+
+        stage("TRIVY"){
+            steps{
+                sh " trivy petclinic nareshbabu1991/petclinic:latest"
+            }
+        }
     }
 }
