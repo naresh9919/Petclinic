@@ -81,7 +81,7 @@ pipeline {
 
         stage("TRIVY"){
             steps{
-                sh " trivy image nareshbabu1991/petclinic:latest"
+                sh " trivy image --severity HIGH,CRITICAL nareshbabu1991/petclinic:latest"
             }
         }
     }
