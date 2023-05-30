@@ -81,7 +81,7 @@ pipeline {
 
         stage("TRIVY"){
             steps{
-                sh " trivy petclinic nareshbabu1991/petclinic:latest"
+                sh " trivy image petclinic nareshbabu1991/petclinic:latest"
             }
         }
     }
