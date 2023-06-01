@@ -45,14 +45,6 @@ pipeline {
                 }
             }
         }
-
-        stage("deploy to tomcat"){
-            steps{
-                sshagent(['tomcat-privatekey']) {
-                    sh "scp -o StrictHostKeyChecking=no target/petclinic.war ubuntu@3.110.121.114:/opt/tomcat/webapps"
-                }
-            }
-        }
         
         stage("OWASP Dependency Check"){
             steps{
@@ -83,6 +75,14 @@ pipeline {
                         sh "docker tag petclinic nareshbabu1991/petclinic:latest "
                         sh "docker push nareshbabu1991/petclinic:latest "
                     }
+                }
+            }
+        }
+
+        stage('trivy'){
+            steps{
+                script{
+                    sh 'trivy fs --security-check vuln,config /var/lib/jenkins/workspace/target'
                 }
             }
         }
