@@ -82,7 +82,15 @@ pipeline {
         stage('trivy'){
             steps{
                 script{
-                    sh 'trivy image --severity HIGH,CRITICAL nareshbabu1991/petclinic:latest'
+                    sh 'trivy trivy image --severity HIGH,CRITICAL nareshbabu1991/petclinic:latest'
+                }
+            }
+        }
+
+        stage("deploy to tomcat"){
+            steps{
+                sshagent(['tomcat-privatekey']) {
+                    sh "scp -o StrictHostKeyChecking=no target/petclinic.war ubuntu@3.110.121.114:/opt/tomcat/webapps"
                 }
             }
         }
