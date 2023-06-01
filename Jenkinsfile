@@ -82,7 +82,7 @@ pipeline {
         stage('trivy'){
             steps{
                 script{
-                    sh 'trivy fs --security-check vuln,config /var/lib/jenkins/workspace/target'
+                    sh 'trivy image nareshbabu1991/petclinic:latest'
                 }
             }
         }
