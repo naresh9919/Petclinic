@@ -90,7 +90,7 @@ pipeline {
         stage("deploy to tomcat"){
             steps{
                 sshagent(['tomcat-privatekey']) {
-                    sh "scp -o StrictHostKeyChecking=no target/petclinic.war ubuntu@15.206.148.60:/opt/tomcat/webapps"
+                    sh "scp -o StrictHostKeyChecking=no target/petclinic.war ubuntu@172.31.0.96:/opt/tomcat/webapps"
                 }
             }
         }
