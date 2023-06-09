@@ -72,8 +72,8 @@ pipeline {
                 script{
                      withDockerRegistry(credentialsId: 'dockerhub-cred', toolName: 'docker') {
                         
-                        sh "docker tag petclinic nareshbabu1991/petclinic:latest "
-                        sh "docker push nareshbabu1991/petclinic:latest "
+                        sh "docker tag petclinic nareshbabu1991/petclinic:1.0.1 "
+                        sh "docker push nareshbabu1991/petclinic:1.0.1 "
                     }
                 }
             }
@@ -82,7 +82,7 @@ pipeline {
         stage('trivy'){
             steps{
                 script{
-                    sh 'trivy image --severity HIGH,CRITICAL nareshbabu1991/petclinic:latest'
+                    sh 'trivy image --severity HIGH,CRITICAL nareshbabu1991/petclinic:1.0.1'
                 }
             }
         }
