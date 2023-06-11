@@ -1,0 +1,35 @@
+---
+- name: Deploy Spring PetClinic to Docker
+  hosts: docker-host
+  become: yes
+
+  vars:
+    container_name: petclinic-container
+    image_name: petclinic-image
+    war_file: petclinic.war
+
+  tasks:
+    - name: Copy PetClinic WAR file to Docker host
+      copy:
+        src: path/target/{{ war_file }}
+        dest: /opt/{{ war_file }}
+
+    - name: Build Docker image
+      docker_image:
+        name: "{{ image_name }}"
+        path: /opt
+        buildargs:
+          WAR_FILE: "{{ war_file }}"
+
+    - name: Remove existing PetClinic container (if running)
+      docker_container:
+        name: "{{ container_name }}"
+        state: absent
+
+    - name: Run PetClinic Docker container
+      docker_container:
+        name: "{{ container_name }}"
+        image: "{{ image_name }}"
+        ports:
+          - "8088:8088"
+        state: started
