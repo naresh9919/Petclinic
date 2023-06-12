@@ -37,9 +37,30 @@ pipeline {
                 sh " mvn clean install"
             }
         }
-        stage('Run Ansible Playbook') {
+        stage('Upload artifact to Nexus') {
             steps {
-                sh 'ansible-playbook -i inventory.ini deploy-docker-petclinic.yml'
+                script{
+                    def readpomVersion = readMavenPom file: 'pom.xml'
+
+                    def nexusRepo = readpomVersion.version.endsWith("SNAPSHOT") ? "petclinic-snapshot" : "petclinic-release"
+                    
+                    nexusArtifactUploader artifacts: 
+                    [
+                        [
+                            artifactId: 'spring-framework-petclinic', 
+                            classifier: '', 
+                            file: 'target/petclinic.war', 
+                            type: 'war'
+                        ]
+                    ], 
+                    credentialsId: 'Nexus-cred', 
+                    groupId: 'org.springframework.samples', 
+                    nexusUrl: '65.0.73.52:8081', 
+                    nexusVersion: 'nexus3', 
+                    protocol: 'http', 
+                    repository: nexusRepo, 
+                    version: "${readpomVersion.version}"
+                }
             }
         }
     }
