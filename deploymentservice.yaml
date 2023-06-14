@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: petclinic
-          image: adijaiswal/cicddevops:6 # Image that will be used to containers in the cluster
+          image: nareshbabu1991/petclinic:latest # Image that will be used to containers in the cluster
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 8080 # The port that the container is running on in the cluster
