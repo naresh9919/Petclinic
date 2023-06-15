@@ -1,19 +1,20 @@
 ---
-- hosts : all
-become : true
+- hosts: all
+  become: true
+  
+  tasks:
+    - name: create docker image using war file
+      command: docker build -t petclinic:latest .
+      args:
+      chdir: /opt/docker
 
-tasks :
-- name : create docker image using war file
-  command : docker build -t petclinic:latest .
-  args :
-   chdir : /opt/docker
+    - name: create tag to image
+      command: docker tag petclinic nareshbabu1991/petclinic
 
-- name : create tag to image
-  command : docker tag petclinic nareshbabu1991/petclinic
+    - name: push image on to dockerhub
+      command: docker push nareshbabu1991/petclinic
 
-- name : push image on to dockerhub
-  command : docker push nareshbabu1991/petclinic
 
-- name : remove docker images from ansible server
-  command : docker rmi petclinic:latest nareshbabu1991/petclinic
-  ignore_errors : yes
+    - name: remove docker images from ansible server
+      command: docker rmi petclinic:latest nareshbabu1991/petclinic
+      ignore_errors: yes
