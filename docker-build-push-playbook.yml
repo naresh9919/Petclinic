@@ -5,8 +5,6 @@
   tasks:
     - name: create docker image using war file
       command: docker build -t petclinic:latest .
-      args:
-      chdir: /opt/docker
 
     - name: create tag to image
       command: docker tag petclinic nareshbabu1991/petclinic
