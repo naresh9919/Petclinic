@@ -1,0 +1,28 @@
+---
+- hosts : all
+become : true
+
+tasks :
+
+- name : stop current running containers
+  command : docker stop petclinic-container
+  ignore_errors : yes
+
+- name : remove stopped container
+  command : docker rm petclinic-container
+  ignore_errors : yes
+
+- name : remove docker image
+  command : docker rmi nareshbabu1991/petclinic-image:latest
+  ignore_errors : yes
+
+#- name : create docker image using war file
+#  command : docker build -t petclinic:latest .
+#  args :
+#   chdir : /opt/docker
+
+- name : pull docker image from dockerhub
+  command : docker pull nareshbabu1991/petclinic-image:latest
+
+- name : create conatine using petclinic-image
+  command : docker run -d --name petclinic-conatainer -p 8080:8080 nareshbabu1991/petclinic-image:latest
