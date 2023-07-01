@@ -1,0 +1,71 @@
+pipeline {
+    agent any 
+    
+    tools{
+        jdk 'jdk11'
+        maven 'maven3'
+    }
+    
+    stages{
+        
+        stage("Cleanup Workspace"){
+            steps{
+                cleanWs()
+            }
+        }
+        
+        stage("Git Checkout"){
+            steps{
+                git branch: 'main', changelog: false, poll: false, url: 'https://github.com/naresh9919/Petclinic.git'
+            }
+        }
+        
+        stage("Compile"){
+            steps{
+                sh "mvn clean compile -DskipTests=true"
+            }
+        }
+        
+         stage("Test Cases"){
+            steps{
+                sh "mvn test -DskipTests=true"
+            }
+        }
+        
+        stage("Build"){
+            steps{
+                sh " mvn clean install -DskipTests=true"
+            }
+        }
+
+        stage('Build docker image'){
+            steps{
+                script{
+                    sh 'docker build -t petclinic .'
+                }
+            }
+        }
+        
+        stage("Docker Build & Push"){
+            steps{
+                script{
+                   withDockerRegistry(credentialsId: 'dockerhub-cred', toolName: 'docker') {
+                        
+                        sh "docker tag petclinic nareshbabu1991/petclinic:latest "
+                        sh "docker push nareshbabu1991/petclinic:latest "
+                    }
+                }
+            }
+        }
+
+        stage ("deployment to k8s") {
+            steps {
+                script {
+                    withKubeConfig([credentialsId: 'k8s']){
+                        sh '/var/lib/jenkins/kubectl apply -f deploymentservice.yaml'
+                    }
+                }
+            }
+        }
+    }
+}
