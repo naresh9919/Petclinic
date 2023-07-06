@@ -9,7 +9,7 @@ pipeline {
     stages {
         stage ('checkout SCM'){
             steps {
-                git branch: 'master', changelog: false, poll: false, url: 'https://github.com/naresh9919/amazon-eks-jenkins-terraform-aj7.git'
+                git branch: 'main', changelog: false, poll: false, url: 'https://github.com/naresh9919/Petclinic.git'
             }
         }
 
@@ -22,11 +22,11 @@ pipeline {
         stage ('Ansible playbook execution'){
             steps {
                 script {
-                ansiblePlaybook credentialsId: 'Ansible', 
+                ansiblePlaybook credentialsId: 'Ansible-cred', 
                 disableHostKeyChecking: true, 
-                installation: 'Ansible', 
+                installation: 'ansible', 
                 inventory: 'hosts', 
-                playbook: 'docker-ansible.yml'
+                playbook: 'docker-build-push-playbook.yml'
             }
         }
     }
