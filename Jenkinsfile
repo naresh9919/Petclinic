@@ -22,11 +22,12 @@ pipeline {
         stage ('Ansible playbook execution'){
             steps {
                 script {
-                ansiblePlaybook credentialsId: 'Ansible-cred', 
-                disableHostKeyChecking: true, 
-                installation: 'ansible', 
-                inventory: 'hosts', 
-                playbook: 'docker-build-push-playbook.yml'
+                    ansiblePlaybook credentialsId: 'Ansible-cred', 
+                    disableHostKeyChecking: true, 
+                    installation: 'ansible', 
+                    inventory: 'hosts', 
+                    playbook: 'docker-build-push-playbook.yml'
+                }
             }
         }
     }
