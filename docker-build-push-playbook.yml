@@ -1,9 +1,24 @@
 ---
-- hosts: web-servers
-  become: true
-  
+- name: Copy WAR file to Docker host server
+  hosts: webservers
+  gather_facts: false
+
   tasks:
-    - name: copy war file onto docker host
-      copy: 
-      src: /var/lib/jenkins/workspace/ansible-docker/target/petclinic.war
-      dest: /opt/docker
+    - name: Copy WAR file to Docker host
+      copy:
+        src: /var/lib/jenkins/workspace/ansible-docker/target/petclinic.war
+        dest: /opt/docker/petclinic.war
+        mode: 0644
+
+    - name: Stop Docker container
+      become: true
+      shell: docker stop petclinic
+      ignore_errors: true
+
+    - name: Copy WAR file to Docker container
+      become: true
+      shell: docker cp /var/lib/jenkins/workspace/ansible-docker/target/petclinic.war petclinic:/opt/docker/petclinic.war
+
+    - name: Start Docker container
+      become: true
+      shell: docker start petclinic
