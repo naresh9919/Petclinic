@@ -3,16 +3,7 @@
   become: true
   
   tasks:
-    - name: create docker image using war file
-      command: docker build -t petclinic:latest .
-
-    - name: create tag to image
-      command: docker tag petclinic nareshbabu1991/petclinic
-
-    - name: push image on to dockerhub
-      command: docker push nareshbabu1991/petclinic
-
-
-    - name: remove docker images from ansible server
-      command: docker rmi petclinic:latest nareshbabu1991/petclinic
-      ignore_errors: yes
+    - name: copy war file onto docker host
+      copy: 
+      src: /var/lib/jenkins/workspace/ansible-docker/target/petclinic.war
+      dest: /opt/docker
