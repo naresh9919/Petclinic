@@ -6,7 +6,7 @@
   tasks:
     - name: Copy WAR file to Docker host
       copy:
-        src: /var/lib/jenkins/workspace/ansible-docker/target/petclinic.war
+        src: /target/petclinic.war
         dest: /opt/docker/petclinic.war
         mode: 0644
 
