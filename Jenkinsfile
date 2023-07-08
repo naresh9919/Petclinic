@@ -26,7 +26,7 @@ pipeline {
                     disableHostKeyChecking: true, 
                     installation: 'ansible', 
                     inventory: 'hosts', 
-                    playbook: 'docker-build-push-playbook.yml'
+                    playbook: 'Nginix.yml'
                 }
             }
         }
