@@ -26,7 +26,7 @@ pipeline {
                     disableHostKeyChecking: true, 
                     installation: 'ansible', 
                     inventory: 'hosts', 
-                    playbook: 'Nginix.yml'
+                    playbook: 'petclinic.yml'
                 }
             }
         }
