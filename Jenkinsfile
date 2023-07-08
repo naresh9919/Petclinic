@@ -22,11 +22,7 @@ pipeline {
         stage ('Ansible playbook execution'){
             steps {
                 script {
-                    ansiblePlaybook credentialsId: 'Ansible-cred', 
-                    disableHostKeyChecking: true, 
-                    installation: 'ansible', 
-                    inventory: 'hosts', 
-                    playbook: 'petclinic.yml'
+                    ansiblePlaybook credentialsId: 'Ansible_docker_cred', installation: 'ansible', inventory: 'hosts', playbook: 'petclinic.yml'
                 }
             }
         }
