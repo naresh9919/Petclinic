@@ -1,0 +1,21 @@
+---
+- name: Deploy petclinic.jar to Docker host
+  hosts: webservers
+  become: true
+
+  tasks:
+    - name: Copy petclinic.jar to Docker host
+      copy:
+        src: /var/lib/jenkins/workspace/ansible-docker/target/petclinic.jar
+        dest: /tmp/petclinic.jar
+
+    - name: Create Docker container
+      docker_container:
+        name: petclinic
+        image: openjdk:11-jre-slim
+        state: started
+        restart_policy: always
+        volumes:
+          - /tmp/petclinic.jar:/app/petclinic.jar
+        ports:
+          - "8080:8080"
