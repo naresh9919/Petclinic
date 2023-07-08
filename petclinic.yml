@@ -4,6 +4,14 @@
   become: true
 
   tasks:
+    - name: Install Maven packages
+      apt:
+        name: maven
+        state: present
+        
+    - name: Build Maven project
+      command: mvn clean install
+      
     - name: Copy petclinic.jar to Docker host
       copy:
         src: /var/lib/jenkins/workspace/ansible-docker/target/petclinic.jar
