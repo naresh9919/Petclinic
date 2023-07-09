@@ -4,7 +4,13 @@
   become: true
 
   tasks:
+    - name: copy war file form jenkins server to ansible
+      copy:
+        src: /var/lib/jenkins/workspace/Jenkins-Ansible/target/petclinic.war
+        dest: /etc/ansible/docker/petclinic.jar
+  
+  tasks:
     - name: copy war file form ansible server to docker host
       copy:
-        src: /target/petclinic.war
+        src: /etc/ansible/docker/petclinic.jar
         dest: /opt/artifact/petclinic.jar
