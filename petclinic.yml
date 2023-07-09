@@ -7,10 +7,10 @@
     - name: copy war file form jenkins server to ansible
       copy:
         src: /var/lib/jenkins/workspace/Jenkins-Ansible/target/petclinic.war
-        dest: /etc/ansible/docker/petclinic.jar
+        dest: /etc/ansible/docker/petclinic.war
   
   tasks:
     - name: copy war file form ansible server to docker host
       copy:
-        src: /etc/ansible/docker/petclinic.jar
-        dest: /opt/artifact/petclinic.jar
+        src: /etc/ansible/docker/petclinic.war
+        dest: /opt/artifact/petclinic.war
