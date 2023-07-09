@@ -21,9 +21,7 @@ pipeline {
 
         stage ('Ansible playbook execution'){
             steps {
-                script {
-                     ansiblePlaybook become: true, installation: 'ansible', inventory: 'hosts', playbook: 'petclinic.yaml'
-                }
+                ansiblePlaybook credentialsId: 'Ansible-cred', installation: 'ansible', inventory: 'hosts', playbook: 'petclinic.yaml'
             }
         }
     }
