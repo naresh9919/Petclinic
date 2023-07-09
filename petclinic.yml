@@ -1,29 +1,10 @@
 ---
-- name: Deploy petclinic.jar to Docker host
+- name: Deploy petclinic.war to Docker host
   hosts: webservers
   become: true
 
   tasks:
-    - name: Install Maven packages
-      apt:
-        name: maven
-        state: present
-        
-    - name: Build Maven project
-      command: mvn clean install
-      
-    - name: Copy petclinic.jar to Docker host
+    - name: copy war file form ansible server to docker host
       copy:
-        src: /var/lib/jenkins/workspace/ansible-docker/target/petclinic.jar
-        dest: /tmp/petclinic.jar
-
-    - name: Create Docker container
-      docker_container:
-        name: petclinic
-        image: openjdk:11-jre-slim
-        state: started
-        restart_policy: always
-        volumes:
-          - /tmp/petclinic.jar:/app/petclinic.jar
-        ports:
-          - "8080:8080"
+        src: /target/petclinic.war
+        dest: /opt/artifact/petclinic.jar
