@@ -22,7 +22,7 @@ pipeline {
         stage ('Ansible playbook execution'){
             steps {
                 script {
-                    ansiblePlaybook credentialsId: 'Ansible_docker_cred', installation: 'ansible', inventory: 'hosts', playbook: '-i petclinic.yml'
+                    ansiblePlaybook credentialsId: 'Ansible_docker_cred', installation: 'ansible', inventory: '/etc/ansible/hosts', playbook: '/etc/ansible/petclinic.yml'
                 }
             }
         }
