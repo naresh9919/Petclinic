@@ -62,7 +62,7 @@ pipeline {
             steps {
                 script {
                     withKubeConfig([credentialsId: 'k8s']){
-                        sh '/var/lib/jenkins/kubectl apply -f deploymentservice.yaml'
+                        sh '/home/ubuntu/kubectl apply -f deploymentservice.yaml'
                     }
                 }
             }
