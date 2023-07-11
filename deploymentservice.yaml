@@ -13,7 +13,7 @@ spec:
         app: petclinic
     spec:
       containers:
-        - name: springboot
+        - name: petclinic
           image: ynareshbabu1991/petclinic:latest
           ports:
             - containerPort: 8080
@@ -26,7 +26,7 @@ kind: Service
 metadata:
   name: petclinic
 spec:
-  type: LoadBalancer
+  type: NodePort
   ports:
     - port: 80
       targetPort: 8080
