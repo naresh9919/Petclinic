@@ -1,40 +1,21 @@
 pipeline {
-    agent any 
-    
-    tools{
+    agent any
+
+    tools {
         jdk 'jdk11'
         maven 'maven3'
     }
-    
-    stages{
-        
-        stage("Cleanup Workspace"){
-            steps{
-                cleanWs()
-            }
-        }
-        
-        stage("Git Checkout"){
-            steps{
+
+    stages {
+        stage ('checkout SCM'){
+            steps {
                 git branch: 'main', changelog: false, poll: false, url: 'https://github.com/naresh9919/Petclinic.git'
             }
         }
-        
-        stage("Compile"){
-            steps{
-                sh "mvn clean compile -DskipTests=true"
-            }
-        }
-        
-         stage("Test Cases"){
-            steps{
-                sh "mvn test -DskipTests=true"
-            }
-        }
-        
-        stage("Build"){
-            steps{
-                sh " mvn clean install -DskipTests=true"
+
+        stage ('maven Build'){
+            steps {
+                sh 'mvn clean install'
             }
         }
 
@@ -62,7 +43,7 @@ pipeline {
             steps {
                 script {
                     withKubeConfig([credentialsId: 'k8s']){
-                        sh '/home/ubuntu/kubectl apply -f deploymentservice.yaml'
+                        sh '/var/lib/jenkins/kubectl apply -f deploymentservice.yaml'
                     }
                 }
             }
